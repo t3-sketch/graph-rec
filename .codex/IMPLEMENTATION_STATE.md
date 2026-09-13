@@ -10,6 +10,8 @@ Priority explicitly set by user: **1. UI smoothness 2. speed 3. everything else*
 
 ## Current status
 
+2026-09-13 publication checkpoint (supersedes earlier review/publication status below): Phase 1–3 passed Astra re-review. Engineering tests 9/9 and typecheck passed; Research tests 10/10 passed. Build/browser were not repeated in re-review. Public repository https://github.com/t3-sketch/graph-rec was created with user approval; implementation checkpoint `45b436d` is on main. Phase 4 is PLANNING_ONLY. The historical entries below retain their original verification scope.
+
 - Phase 3 (2026-09-13): offline mock export implemented. Astra P2 fixes: JSON keys are decoded before duplicate detection (`\u0063ase_id` counts as `case_id`); `created_at` / `requested_at` must be real UTC dates (Gregorian month length, leap years, hours 0–23, minutes/seconds 0–59). Awaiting re-review. Do not start Phase 4. Mock export is integration_test / synthetic only.
 - Architecture handoff (2026-09-13): overall Phase 1–2 passed Astra re-review. Phase 3 contract remains `docs/research-export.md` version 0.1.
 
@@ -128,8 +130,8 @@ Earlier MVP verification:
 
 ## Next exact actions
 
-1. Return the two P2 fixes to Astra for re-review. Do not start Phase 4 UI, live data, or ratings collection.
-2. Do not create a GitHub remote or commit until the user asks and visibility is decided. Review `.openai/hosting.json` and `.codex/SOURCE_SNAPSHOT.json` before any public commit.
+1. Astra designs Phase 4 data source, baseline, and end-to-end scope; Sol implements only after user approval. Do not start live-data integration or ratings collection yet.
+2. Public GitHub checkpoint is complete. Keep `.openai/` and `.codex/SOURCE_SNAPSHOT.json` excluded. Repository publication does not authorize Site deployment.
 3. If a later Graph-Rec change is authorized, keep provider boundaries, run `python3 scripts/isolated-run.py test` and `build`, and re-check only affected browser behavior.
 
 ## Resume notes

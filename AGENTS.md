@@ -10,7 +10,7 @@ Before substantial work:
 6. Read only files necessary for the current task. Do not broadly scan the repository or create subagents without an explicit request.
 7. After implementation and verification, and before interruption, update `.codex/IMPLEMENTATION_STATE.md` with completed changes, actual checks, remaining limits, and the next action. Update PLAN when its phase or authorization changes.
 
-Phase 1–2 passed re-review. Phase 3 version 0.1 is implemented and awaits Astra review. Read `docs/research-export.md` before changing the export contract. Do not start Phase 4 UI or live-data integration. Preserve existing framework instructions below.
+Phase 1–3 passed Astra re-review. Phase 4 is PLANNING_ONLY; do not start UI or live-data integration. Read `docs/research-export.md` before changing the export contract. Preserve existing framework instructions below.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
