@@ -2,7 +2,9 @@
 
 A song-level music exploration canvas built with Next.js, TypeScript, React Flow, d3-force, and Zustand. Songs form a branching session map; choosing a direction never implies liking a track.
 
-**Demo:** [Hugging Face Space](https://huggingface.co/spaces/t3-sketch/sonder) *(deployment pending until the first successful publish)*
+**Demo:** [Try Sonder on Hugging Face](https://huggingface.co/spaces/t3-sketch/sonder) · [Open directly](https://t3-sketch-sonder.static.hf.space/index.html)
+
+Free public demo: explore 40 Creative Commons songs, preview excerpts, Like/Save, and export a frozen session. Updates to `main` are tested, built, and published automatically by [GitHub Actions](https://github.com/t3-sketch/graph-rec/actions/workflows/deploy-hugging-face.yml).
 
 ## Continue implementation
 
