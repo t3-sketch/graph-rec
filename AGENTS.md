@@ -10,7 +10,7 @@ Before substantial work:
 6. Read only files necessary for the current task. Do not broadly scan the repository or create subagents without an explicit request.
 7. After implementation and verification, and before interruption, update `.codex/IMPLEMENTATION_STATE.md` with completed changes, actual checks, remaining limits, and the next action. Update PLAN when its phase or authorization changes.
 
-Phase 1–3 passed Astra re-review. Phase 4 is PLANNING_ONLY; do not start UI or live-data integration. Read `docs/research-export.md` before changing the export contract. Preserve existing framework instructions below.
+Canonical checkout is `/Users/macuser/dev/graph-rec`, recovered with user approval. The old Documents checkout and cache are preserved backups, not editing targets. Phase 4 and its review fixes are implemented; verify the recovered checkout before final acceptance. Read `docs/phase4-implementation.md` and `docs/research-export-v0.2.md`; retain the 0.1 contract. The 2026-09-14 PLAN section authorizes Sol to publish the free Public HF Static demo at `t3-sketch/sonder` and the scoped Engineering GitHub update. Phase 5 and paid services remain excluded. Preserve existing framework instructions below.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

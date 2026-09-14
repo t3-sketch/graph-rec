@@ -52,3 +52,8 @@
 .quiet-edge .react-flow__edge-path{stroke:#849f7955;stroke-width:.8}
 .song-node.active .node-art:after{animation:orbit-breathe 6s ease-in-out infinite}
 @keyframes orbit-breathe{0%,100%{transform:scale(.94);opacity:.4}50%{transform:scale(1.14);opacity:1}}
+.heading-actions{display:flex;gap:8px;pointer-events:auto}
+.start-seeds{display:flex;gap:18px;margin-bottom:8px}
+.start-seeds .starter-art{width:104px;height:104px;transform:none;margin:0}
+.start-seeds .starter-art small{position:absolute;left:0;right:0;bottom:-22px;font-size:8px;letter-spacing:.8px;color:#9aab8c}
+.genre-cross{font-size:7px;letter-spacing:.6px;color:#d7c48a;margin-top:6px}

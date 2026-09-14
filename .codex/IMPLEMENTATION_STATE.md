@@ -10,6 +10,26 @@ Priority explicitly set by user: **1. UI smoothness 2. speed 3. everything else*
 
 ## Current status
 
+2026-09-14 deployment checkpoint: after explicit action-time approval, created the fine-grained `sonder-github-actions` token with write access limited to Space `t3-sketch/sonder` (no inference/billing/user-wide write permissions). Saved it as Graph-Rec Actions `HF_TOKEN`; GitHub UI and CLI both confirm the secret name. No token value is stored in project files or conversation. Publishing the tested Phase 4 source and the main-only Actions workflow is next; public app verification is still pending.
+
+2026-09-14 latest continuation: user approved Astra to finish implementation/publication as a one-time exception and requested Computer Use registration of HF_TOKEN. GitHub Secrets UI confirms no repository secrets. HF token settings redirects to password identity confirmation; user was asked to complete that in Chrome. No token was read, created, or saved. Next credential action after identity confirmation: inspect token options, prepare a fine-grained token limited to `t3-sketch/sonder`, obtain action-time confirmation before creating new write access, then save only to graph-rec Actions HF_TOKEN without displaying its value.
+
+Publication fixes now saved: copy credits into the static Space package, keep HF description below 60 characters, use tested webpack build, restrict workflow to main, serialize deployments without cancellation and skip stale commits, install HF client before exposing token, verify existing Space is Public/static before uploading. README's contradictory 'No ranking' wording corrected. Direct test 15/15, typecheck, webpack build and Research 12/12 PASS on this continuation; 40 audio hashes match audit. No commit/push/deploy yet. Earlier unfinished-work list below is historical; live HF still shows its starter page.
+
+2026-09-14 HF publication in progress: `https://huggingface.co/spaces/t3-sketch/sonder` was created as a free Public Static Space using the user's existing browser login. It currently serves HF's default welcome page, NOT Sonder. Sol saved `.github/workflows/deploy-hugging-face.yml`, README changes (demo link near the top, explicitly pending), and a footer Credits link, then stopped at the model usage limit. These changes are uncommitted and NOT accepted. Root review found unfinished packaging: CREDITS.md is checked in staged output but not copied there; the HF short_description exceeds the 60-character form limit; use the known passing webpack build or verify the default build before release. README still says 'No ranking' despite the genre rank baseline. Recheck workflow concurrency and trusted-main dispatch before enabling credentials. No GitHub push or app deployment happened.
+
+Auth checkpoint: GitHub CLI is logged into t3-sketch, Actions enabled, but repository HF_TOKEN secret is absent and local HF CLI is not logged in. User was asked to register HF_TOKEN directly in GitHub Actions secrets, never in chat. GitHub CLI's current listed scopes do not include workflow; verify workflow publication permission before pushing. Next: resume Sol after reset or obtain user permission for a temporary Astra implementation exception, finish and test the saved workflow, confirm secret registration, publish and verify actual demo/export. Do not mark HF's default welcome page as success.
+
+2026-09-14 latest: user approved free Public HF Static Space `t3-sketch/sonder`, demo verification and scoped Engineering README publication. Astra recorded the Sol handoff in the first section of PLAN. Deployment has NOT been executed by this planning turn. Sol's next action is that section, not the historical Phase 4 planning or old deployment prohibition below. Phase 5 and paid services remain excluded.
+
+2026-09-13 canonical recovery (latest; all earlier status is historical): canonical checkout is now `/Users/macuser/dev/graph-rec`, with user approval. Public Git history was cloned at `aa91a066c8f80566dc43dca3b69c1b7169b389d8`, then the Phase 4 implementation and three review fixes were copied from `/Users/macuser/.cache/sonder-phase4-work`. Old Documents checkout and cache remain untouched backups. No commit, push, deployment or Phase 5 work.
+
+Recovery checks: direct canonical test 15/15, typecheck and webpack production build PASS; Research tests 12/12 PASS. Fresh CLI bundles pass the Research reader: 0.2 has 3 cases / 22 recommendations / 0 events; 0.1 retains 2 cases / 15 recommendations. Source (excluding generated provenance), tests and public assets match the working copy by checksum comparison. All 40 audio files match the restored audit SHA-256 and sizes (30,254,221 bytes). Provenance regenerated in this Git checkout; 24 source files.
+
+Browser smoke on the canonical production build at http://127.0.0.1:3002: The Factory starts with 9 nodes, playback advances to 0:11, Like/Save persist with the map after reload. No console errors/warnings observed. Export click produced no visible error, but the browser automation download event timed out: browser download delivery was NOT verified in this recovery pass. CLI export is verified. Full branch/drag/mobile/FPS and changed-build rejection browser tests were not repeated.
+
+Recovery limits: Documents files were iCloud dataless/read-timeout. `docs/phase4-implementation.md` and `docs/research-export-v0.2.md` were semantically reconstructed from the accepted conversation, not recovered byte-for-byte. `docs/fma40-audit.json` was restored from the saved 40-track audit records. Unreadable old private files are not claimed recovered. Dependencies currently use a symlink to the existing shared cache. Legacy sync helper is disabled; edit only this canonical checkout.
+
 2026-09-13 publication checkpoint (supersedes earlier review/publication status below): Phase 1–3 passed Astra re-review. Engineering tests 9/9 and typecheck passed; Research tests 10/10 passed. Build/browser were not repeated in re-review. Public repository https://github.com/t3-sketch/graph-rec was created with user approval; implementation checkpoint `45b436d` is on main. Phase 4 is PLANNING_ONLY. The historical entries below retain their original verification scope.
 
 - Phase 3 (2026-09-13): offline mock export implemented. Astra P2 fixes: JSON keys are decoded before duplicate detection (`\u0063ase_id` counts as `case_id`); `created_at` / `requested_at` must be real UTC dates (Gregorian month length, leap years, hours 0–23, minutes/seconds 0–59). Awaiting re-review. Do not start Phase 4. Mock export is integration_test / synthetic only.
@@ -130,13 +150,15 @@ Earlier MVP verification:
 
 ## Next exact actions
 
+Latest next action: finish Phase 4 acceptance review on this canonical checkout, including browser download delivery if required for acceptance. Read PLAN and the recovered Phase 4 documents. Do not run the old cache-to-Documents sync helper. Do not start Phase 5, commit, push or deploy without user scope. The numbered items below are historical.
+
 1. Astra designs Phase 4 data source, baseline, and end-to-end scope; Sol implements only after user approval. Do not start live-data integration or ratings collection yet.
 2. Public GitHub checkpoint is complete. Keep `.openai/` and `.codex/SOURCE_SNAPSHOT.json` excluded. Repository publication does not authorize Site deployment.
 3. If a later Graph-Rec change is authorized, keep provider boundaries, run `python3 scripts/isolated-run.py test` and `build`, and re-check only affected browser behavior.
 
 ## Resume notes
 
-- Workspace: `/Users/macuser/Documents/ChatGPT/Graph-Rec`; npm; local Git initialized 2026-09-13, no remote, no commit.
+- Workspace: `/Users/macuser/dev/graph-rec`; npm; remote `https://github.com/t3-sketch/graph-rec.git`. Documents checkout is a preserved backup, not the editing target.
 - Read this file and original request before changing scope. Do not recreate existing files from scratch.
 - Local preview uses http://localhost:3000 from the isolated copy. Confirm server availability on every resume.
 - Useful alternate Node executable: `/Users/macuser/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node` (verify availability).

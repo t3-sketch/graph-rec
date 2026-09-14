@@ -1,4 +1,4 @@
-node_modules/
+node_modules
 .next/
 out/
 *.tsbuildinfo
@@ -8,3 +8,4 @@ out/
 .playwright-mcp/
 .openai/
 .codex/SOURCE_SNAPSHOT.json
+src/research-export/provenance.generated.ts

@@ -1,4 +1,6 @@
-import type { ExplorationSession, MusicGraphNode } from '@/domain/types';
+import type { ExplorationSession, MusicGraphNode, SessionBuildProvenance } from '@/domain/types';
+import { FMA40_DATASET_ID, FMA40_PROVIDER_ID } from '@/catalog/fma40';
+import { PROVENANCE } from '@/research-export/provenance.generated';
 export function activePath(session: ExplorationSession): MusicGraphNode[] {
   const byId = new Map(session.nodes.map(n => [n.nodeId, n]));
   const result: MusicGraphNode[] = [];
@@ -7,7 +9,33 @@ export function activePath(session: ExplorationSession): MusicGraphNode[] {
   while (node && !visited.has(node.nodeId)) { result.unshift(node); visited.add(node.nodeId); node = node.parentNodeId ? byId.get(node.parentNodeId) : undefined; }
   return result;
 }
-export const STORAGE_KEY = 'sonder.exploration.v1';
+export const STORAGE_KEY = 'sonder.exploration.v2';
+export function currentBuildProvenance(): SessionBuildProvenance {
+  return {
+    catalog_sha256: PROVENANCE.catalog_sha256,
+    commit: PROVENANCE.commit,
+    dirty: PROVENANCE.dirty,
+    source_files: { ...PROVENANCE.source_files },
+  };
+}
+function sourceFilesMatch(saved: Record<string, string>, current: Record<string, string>): boolean {
+  const keys = Object.keys(current);
+  return keys.length === Object.keys(saved).length && keys.every(key => saved[key] === current[key]);
+}
+export function isCurrentBuildSession(session: ExplorationSession): boolean {
+  const saved = session.buildProvenance;
+  if (!saved || saved.catalog_sha256 !== PROVENANCE.catalog_sha256) return false;
+  return sourceFilesMatch(saved.source_files, PROVENANCE.source_files);
+}
+export function isFmaDemoSession(session: ExplorationSession): boolean {
+  return session.datasetId === FMA40_DATASET_ID && session.providerId === FMA40_PROVIDER_ID && Array.isArray(session.cases) && isCurrentBuildSession(session);
+}
+export function isLegacyCatalogSession(session: ExplorationSession): boolean {
+  const ids = [session.seedTrackId, ...session.nodes.map(n => n.track.id)];
+  if (ids.some(id => id.startsWith('sonder-'))) return true;
+  if (ids.some(id => id.startsWith('fma-')) && !isFmaDemoSession(session)) return true;
+  return false;
+}
 export function restoreSession(raw: string | null): ExplorationSession | null {
   if (!raw) return null;
   try {
@@ -24,6 +52,12 @@ export function restoreSession(raw: string | null): ExplorationSession | null {
       if (path.length !== node.depth + 1 || path[0].parentNodeId || path[0].track.id !== s.seedTrackId) return null;
     }
     if (!s.interactionEvents.every((e: ExplorationSession['interactionEvents'][number]) => e && typeof e.type === 'string' && typeof e.trackId === 'string' && typeof e.timestamp === 'string')) return null;
+    if (s.cases !== undefined && !Array.isArray(s.cases)) return null;
+    if (s.researchEvents !== undefined && !Array.isArray(s.researchEvents)) return null;
+    if (s.buildProvenance !== undefined) {
+      const provenance = s.buildProvenance;
+      if (!provenance || typeof provenance !== 'object' || typeof provenance.catalog_sha256 !== 'string' || provenance.source_files === null || typeof provenance.source_files !== 'object' || Array.isArray(provenance.source_files)) return null;
+    }
     return s as ExplorationSession;
   } catch { return null; }
 }

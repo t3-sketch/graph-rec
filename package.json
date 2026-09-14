@@ -4,11 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0",
+    "predev": "tsx scripts/write-provenance.ts",
+    "prebuild": "tsx scripts/write-provenance.ts",
+    "pretypecheck": "tsx scripts/write-provenance.ts",
+    "pretest": "tsx scripts/write-provenance.ts",
     "build": "next build",
+    "postbuild": "cp CREDITS.md out/CREDITS.md",
     "start": "python3 -m http.server 3000 --directory out",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",
-    "export:research": "tsx scripts/export-research.ts"
+    "export:research": "tsx scripts/write-provenance.ts && tsx scripts/export-research.ts"
   },
   "dependencies": {
     "@xyflow/react": "^12.10.0",

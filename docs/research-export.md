@@ -1,5 +1,7 @@
 # Research export contract — version 0.1
 
+最新状況：0.1はPhase 3再レビュー合格。Phase 4の実曲契約は[0.2](research-export-v0.2.md)を参照。以下のレビュー待ち等は当初の記録。
+
 設計担当：Astra。2026-09-13。状態：設計確定。実装はAstraレビュー待ち。この文書は契約の正本であり、実装済みの証拠ではない。
 実装担当はSolまたは別agent。Phase 3だけが実装対象。Phase 4には進まない。
 

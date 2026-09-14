@@ -29,6 +29,16 @@ for path in files:
     if not target.exists() or target.read_bytes() != data:
         target.write_bytes(data)
     manifest[str(relative)] = hashlib.sha256(data).hexdigest()
+tsx = cache / 'node_modules' / '.bin' / 'tsx'
+if tsx.exists() and (source / 'scripts' / 'write-provenance.ts').exists():
+    subprocess.run([str(tsx), str(source / 'scripts' / 'write-provenance.ts')], cwd=source, check=True)
+    generated = source / 'src' / 'research-export' / 'provenance.generated.ts'
+    if generated.exists():
+        target = checkout / generated.relative_to(source)
+        data = generated.read_bytes()
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(data)
+        manifest[str(generated.relative_to(source))] = hashlib.sha256(data).hexdigest()
 # Remove only obsolete source files from our generated verification copy.
 for folder in ['src', 'tests', 'public', 'scripts']:
     for path in (checkout / folder).rglob('*'):
@@ -38,7 +48,9 @@ link = checkout / 'node_modules'
 if not link.exists():
     link.symlink_to('../node_modules')
 import json
-(source / '.codex' / 'SOURCE_SNAPSHOT.json').write_text(json.dumps(manifest, indent=2) + '\n')
+codex = source / '.codex'
+codex.mkdir(parents=True, exist_ok=True)
+(codex / 'SOURCE_SNAPSHOT.json').write_text(json.dumps(manifest, indent=2) + '\n')
 print(f'Running {args.task} from {checkout}; source remains {source}', flush=True)
 command = ['npm', 'run', args.task]
 if args.task in ['dev', 'build']:
