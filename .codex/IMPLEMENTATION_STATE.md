@@ -10,6 +10,8 @@ Priority explicitly set by user: **1. UI smoothness 2. speed 3. everything else*
 
 ## Current status
 
+2026-09-14 career presentation stage 2: README now links three design decisions to existing specification, source, and tests in `docs/design-evidence.md`. Checked code paths, source anchors and the scope of the existing verification record. Documentation only; no new app test, build, deployment or user-study claim. Music RAG is excluded. Publishing uses an isolated public snapshot and preserves local uncommitted work.
+
 2026-09-14 career presentation stage 1 VERIFIED: README + live-demo image published in de706a2. Public file hashes and added relative links checked; GitHub rendering and image inspected. About updated and profile pins verified in product / RAG / research / team order. Documentation-only commit skipped app redeployment; no new functional test claim. Existing local uncommitted work remains untouched.
 
 2026-09-14 career presentation stage 1: user authorized README introduction, role, verification summary, live-demo screenshot and repository description changes. Documentation only; app code and experiment conditions unchanged. Screenshot captured from the public demo; existing verification claims retain their original dates. Publishing independently of local uncommitted work. No new app test or research-result claim.
