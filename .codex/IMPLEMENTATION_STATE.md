@@ -10,6 +10,8 @@ Priority explicitly set by user: **1. UI smoothness 2. speed 3. everything else*
 
 ## Current status
 
+2026-09-14 career presentation stage 1 VERIFIED: README + live-demo image published in de706a2. Public file hashes and added relative links checked; GitHub rendering and image inspected. About updated and profile pins verified in product / RAG / research / team order. Documentation-only commit skipped app redeployment; no new functional test claim. Existing local uncommitted work remains untouched.
+
 2026-09-14 career presentation stage 1: user authorized README introduction, role, verification summary, live-demo screenshot and repository description changes. Documentation only; app code and experiment conditions unchanged. Screenshot captured from the public demo; existing verification claims retain their original dates. Publishing independently of local uncommitted work. No new app test or research-result claim.
 
 2026-09-14 final publication checkpoint: documentation follow-up source `54e1a38266c8ed02d83dd581fe1786db3a641e96` deployed successfully in Actions run 34794653262 (47s); README links verified on GitHub. HF-embedded page also downloaded a real JSON file accepted by Research: 1 case / 8 recommendations / 10 events. Public CREDITS.md SHA-256 matches the repository. This verification-only record uses `[skip ci]` to avoid a recursive documentation redeployment; deployed app source remains 54e1a38. No Phase 5 or Research repo push.
