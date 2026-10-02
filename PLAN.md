@@ -8,11 +8,21 @@
 
 ## SPARC S0〜S3 採用範囲（2026-10-01）
 
-ユーザー指示と `plan/SPARC.md` のコード実装計画に基づき、S0〜S3だけをEngineering正本へ採用する。S1はPyTorchの人工データモデル検証（Item/User/Interest tower、RQ、6種loss、コードブック勾配、padding、保存/読込）、S2は人工系列の小規模学習・artifact・決定的全件検索、S3は127.0.0.1 loopback HTTPとTS `RecommendationProvider` adapterの境界検証を担当する。既存 `GenreJaccardProvider`、mock、UI、`dependencies` の既定値、FMA40音源と0.1/0.2契約は変更しない。
+ユーザー指示と [SPARC.md](SPARC.md) のコード実装計画に基づき、S0〜S3だけをEngineering正本へ採用する。S1はPyTorchの人工データモデル検証（Item/User/Interest tower、RQ、6種loss、コードブック勾配、padding、保存/読込）、S2は人工系列の小規模学習・artifact・決定的全件検索、S3は127.0.0.1 loopback HTTPとTS `RecommendationProvider` adapterの境界検証を担当する。既存 `GenreJaccardProvider`、mock、UI、`dependencies` の既定値、FMA40音源と0.1/0.2契約は変更しない。
 
 S4（音楽データの選定・特徴・本学習）、S5（store/session/composition/UI配線）、S6（0.3研究出力）、公開・deployは今回の採用範囲外とする。人工artifactをFMA40推薦へ流用しない。実装後は既存の変更範囲に応じてtest/typecheck/buildを確認し、S0〜S3の検査結果・未検証範囲・最小代案を `.codex/IMPLEMENTATION_STATE.md` に記録する。
 
 進捗表示：[SPARC dashboard](docs/sparc-dashboard.html)。
+
+## SPARC導入の計画案（2026-10-01・履歴）
+
+以下は採用前の計画記録。現在の実装範囲・完了状況は上記を参照。
+
+同日追記：ユーザー依頼によりSPARC.mdへ軽量モデル向けコード実装計画を追加。S0〜S3を最初の実装候補とし、人工データでモデル・検索・HTTP/TS adapterまでを検査する。音楽学習とUI接続は後続単位。今回は計画のみで、実装agentは起動していない。型・loss・勾配・候補統合・通信・保存/export境界・検査・引継ぎ文を記録した。
+
+ユーザー依頼に基づき、SPARC論文と既存provider/保存/export境界を確認した。今回は計画のみ。提案は [SPARC.md](SPARC.md)。既存GenreJaccardProviderを保持し、独立モデルとadapterを追加する。学習データと論文の不足仕様を先に確定し、保存・exportのJaccard固定部分だけを切り分ける。
+
+実装・復元・学習・公開は未実施。「元のファイル」の復元元は未指定で、両checkoutの追跡対象に未コミット変更なし。正本は引き続き `/Users/macuser/dev/graph-rec`。Research master PLANは読取済み・未更新。本案は採用済み計画ではなく、実装前に全体計画へ採用範囲を反映する。次は復元意図と音楽の学習データ/特徴の確定。
 
 ## 就活向け第二段：根拠への導線（2026-09-14）
 
