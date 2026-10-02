@@ -1,6 +1,10 @@
 # SPARC導入計画 — Sonderの交換可能な推薦モジュール
 
-2026-10-01 / Astra / DRAFT・計画のみ。実装、復元、学習、公開は未実施。
+2026-10-02 レビュー修正完了：対照学習の正解列、単一target条件BCE、k_eff、API現在曲除外、artifact由来情報の5点を正本で修正。Python 7/7・Node 19/19・typecheck・webpack build・CLI smoke PASS。200 step/seed 0の推論BCEは0.6940603852→0.0967546701。詳細は正本のIMPLEMENTATION_STATEを参照。音楽データでの品質・UI接続は未検証。
+
+2026-10-01 / Astra / S0〜S3実装・検査済み。S4〜S6（音楽学習、Sonder接続、0.3、公開）は未着手。
+
+最新状態：S0の採用範囲をEngineering正本とResearch master PLANへ記録し、S1〜S3を人工データで実装した。既存baseline、mock、UI、dependencies既定値、40音源は保持。検査結果と残作業はEngineering正本の`.codex/IMPLEMENTATION_STATE.md`と`docs/sparc-dashboard.html`に記録する。
 
 ## 目的と既存資産
 
@@ -104,7 +108,7 @@ API応答はカタログ内ID、重複、除外、件数、有限score、モデ�
 
 ## コード実装計画（2026-10-01追記）
 
-この節は軽量モデル向けの実装指示書案。ユーザーの今回の依頼は計画の追記までで、実装agentの起動やコード変更は行わない。Astraが設計、Sol等の軽量モデルが範囲を指定された実装を担当する。
+この節は軽量モデル向けの実装指示書。今回の採用範囲はS0〜S3で、S1〜S3の実装・検査は完了した。Astraが設計、Sol等の軽量モデルが範囲を指定された実装を担当する。
 
 ### 1. 最初に渡す実装単位
 
@@ -268,7 +272,7 @@ baselineの保存keyは `sonder.exploration.v2` を維持する。SPARCは `sond
 | store/保存 | 遅延応答が別sessionに入る、履歴ゼロから再試行不能、別provider key上書き、artifact違いで復元 |
 | export | SPARCを0.2としてexport可能、または既存0.1/0.2が通らない |
 
-実装後の予定コマンド（今回は未実行）：
+S0〜S3で実行したコマンド：
 
 ```sh
 # repo root。pythonはモジュール用環境を有効化したもの
@@ -285,7 +289,7 @@ S1〜S3ではPython/adapter検査と既存test/typecheckを行い、依存追加
 
 ### 9. 軽量モデルへ渡す指示文
 
-以下はユーザーが実装開始を指示した後に渡す文面。現時点では送信・実行していない。
+以下は実装開始時に渡す指示文の記録。今回のS0〜S3で送信・実行済みであり、S4〜S6には適用していない。
 
 > SPARC.md「コード実装計画」のS0〜S3だけを実装してください。正本は /Users/macuser/dev/graph-rec、計画の現保存先は /Users/macuser/orca/workspaces/graph-rec/plan/SPARC.md です。AGENTS/PLAN/IMPLEMENTATION_STATEと計画の最新差分を読み、採用範囲を正本とResearch master PLANへ記録してから着手してください。既存GenreJaccardProviderとmock、UI、dependenciesの既定値、40音源は保持してください。人工データでRQ・tower・6種loss・決定的検索・HTTP/TS adapterを検査し、音楽データの選定・本学習・UI配線・0.3・公開は始めないでください。コードブックの推薦loss勾配、未知ID/版違い/timeout拒否を検証してください。データや設計が不足する部分を推測して置換せず、影響と最小代案を返してください。各単位の検査結果と残作業を既存状態文書へ記録してください。
 
