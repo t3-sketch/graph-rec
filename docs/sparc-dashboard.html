@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SPARC progress — Sonder</title>
+  <style>
+    :root { color-scheme: light; --ink:#202124; --muted:#6d7178; --line:#dfe1e5; --green:#438b67; --blue:#3f70d4; --amber:#ad741d; --red:#a94a43; --bg:#f6f7f8; }
+    * { box-sizing: border-box; }
+    body { margin:0; padding:28px; color:var(--ink); background:var(--bg); font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { max-width:1180px; margin:auto; }
+    h1 { margin:0 0 5px; font-size:28px; letter-spacing:-.02em; }
+    h2 { margin:28px 0 10px; font-size:20px; }
+    .subtitle { color:var(--muted); margin:0 0 22px; }
+    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+    .card { min-height:112px; padding:17px; background:#fff; border:1px solid var(--line); border-radius:12px; box-shadow:0 1px 2px #0000000a; }
+    .label { color:var(--muted); font-size:13px; }
+    .value { margin:5px 0 2px; font-size:28px; font-weight:700; letter-spacing:-.03em; }
+    .detail { color:var(--muted); font-size:13px; }
+    .progress { height:8px; margin-top:13px; overflow:hidden; border-radius:8px; background:#e4e7e3; }
+    .progress > span { display:block; height:100%; width:100%; background:var(--green); }
+    .panel { overflow:hidden; background:#fff; border:1px solid var(--line); border-radius:12px; }
+    table { width:100%; border-collapse:collapse; }
+    th,td { padding:11px 13px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top; }
+    th { color:var(--muted); font-size:13px; font-weight:600; background:#fbfbfc; }
+    tr:last-child td { border-bottom:0; }
+    .badge { display:inline-block; min-width:54px; padding:2px 8px; border:1px solid currentColor; border-radius:5px; text-align:center; font-size:12px; }
+    .done { color:var(--green); } .hold { color:var(--amber); } .blocked { color:var(--red); }
+    .note { padding:15px 17px; color:var(--muted); background:#fff; border:1px solid var(--line); border-radius:12px; }
+    .note strong { color:var(--ink); }
+    footer { margin-top:22px; color:var(--muted); font-size:12px; }
+    @media (max-width:760px) { body { padding:16px; } .grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } th:nth-child(4),td:nth-child(4) { display:none; } }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>SPARC progress</h1>
+    <p class="subtitle">Sonder / S0〜S3人工データ検証 — 2026-10-01更新</p>
+    <section id="metrics" class="grid" aria-label="進捗メトリクス"></section>
+
+    <h2>実装単位</h2>
+    <div class="panel"><table><thead><tr><th>ID</th><th>状態</th><th>内容</th><th>検査</th><th>残作業・境界</th></tr></thead><tbody id="units"></tbody></table></div>
+
+    <h2>未着手の境界</h2>
+    <div class="note"><strong>S4〜S6は今回開始しない。</strong> 音楽データ・特徴・ラベル・時系列分割が未確定のため、本学習は保留。S5のstore/session/UI配線、S6の0.3 reader、公開・deployも保留。人工artifactをFMA40へ流用しない。</div>
+    <footer>正本: /Users/macuser/dev/graph-rec · 計画: plan/SPARC.md · 状態: .codex/IMPLEMENTATION_STATE.md</footer>
+  </main>
+  <script>
+    const metrics = [
+      ['S0〜S3', '4 / 4', '実装単位', '100%'],
+      ['Python検査', '7 / 7', '10/02 修正・回帰検査済み', '100%'],
+      ['Node検査', '19 / 19', '既存15 + adapter4', '100%'],
+      ['既定provider', '保持', 'GenreJaccard + mock + UI', '100%']
+    ];
+    const units = [
+      ['S0', 'done', '計画採用範囲をEngineering / Researchへ記録', 'PLAN差分確認', 'なし'],
+      ['S1', 'done', 'RQ・Item/User/Interest tower・6種loss', '7/7 Python; 対角positive・単一query・codebook勾配', '音楽特徴は未接続'],
+      ['S2', 'done', '人工系列学習・artifact・決定的検索', '推論BCE 0.694→0.097・k_eff・由来hash', '本学習と品質評価はS4'],
+      ['S3', 'done', 'loopback HTTP・TypeScript adapter', '未知ID・版違い・余分key・NaN・timeout・実HTTP拒否', 'UI/store配線はS5'],
+      ['S4', 'hold', '音楽データ・特徴・本学習', '未着手', 'データprotocol・分割・予算を確定後'],
+      ['S5', 'hold', 'Sonder store/session/UI接続', '未着手', '実曲artifactが成立後'],
+      ['S6', 'hold', '0.3研究出力・reader・公開', '未着手', '契約と配信方式を別途設計']
+    ];
+    const status = { done:['done','完了'], hold:['hold','保留'], blocked:['blocked','要判断'] };
+    document.querySelector('#metrics').innerHTML = metrics.map(([label,value,detail,width]) => `<article class="card"><div class="label">${label}</div><div class="value">${value}</div><div class="detail">${detail}</div><div class="progress"><span style="width:${width}"></span></div></article>`).join('');
+    document.querySelector('#units').innerHTML = units.map(([id,state,content,check,remaining]) => `<tr><td>${id}</td><td><span class="badge ${status[state][0]}">${status[state][1]}</span></td><td>${content}</td><td>${check}</td><td>${remaining}</td></tr>`).join('');
+  </script>
+</body>
+</html>

@@ -1,5 +1,19 @@
 # Graph-Rec / Sonder — Engineering引き継ぎ計画
 
+## SPARCレビュー修正（2026-10-02）
+
+ユーザーの「こっちで直しちゃおう。やっといて」によりAstraがS0〜S3のレビュー指摘5点を修正・再検証する。対照学習の正解列、計画どおりの単一target条件付きBCE、残候補数に応じた興味数、API側の現在曲除外、artifact由来情報が対象。これらの回帰検査と人工smokeも更新する。S4〜S6、UI配線、公開は対象外。
+
+完了：5点の修正と回帰検査、Python 7/7・Node 19/19・typecheck・webpack build・CLI smokeが成功。実測とartifactは既存IMPLEMENTATION_STATEに記録。S4以降は未着手。
+
+## SPARC S0〜S3 採用範囲（2026-10-01）
+
+ユーザー指示と `plan/SPARC.md` のコード実装計画に基づき、S0〜S3だけをEngineering正本へ採用する。S1はPyTorchの人工データモデル検証（Item/User/Interest tower、RQ、6種loss、コードブック勾配、padding、保存/読込）、S2は人工系列の小規模学習・artifact・決定的全件検索、S3は127.0.0.1 loopback HTTPとTS `RecommendationProvider` adapterの境界検証を担当する。既存 `GenreJaccardProvider`、mock、UI、`dependencies` の既定値、FMA40音源と0.1/0.2契約は変更しない。
+
+S4（音楽データの選定・特徴・本学習）、S5（store/session/composition/UI配線）、S6（0.3研究出力）、公開・deployは今回の採用範囲外とする。人工artifactをFMA40推薦へ流用しない。実装後は既存の変更範囲に応じてtest/typecheck/buildを確認し、S0〜S3の検査結果・未検証範囲・最小代案を `.codex/IMPLEMENTATION_STATE.md` に記録する。
+
+進捗表示：[SPARC dashboard](docs/sparc-dashboard.html)。
+
 ## 就活向け第二段：根拠への導線（2026-09-14）
 
 ユーザーの「Music-RAG以外の第二段の他は実行」に基づき、公開READMEから既存の判断・結果・コード・検証へ進める文書更新とGitHub反映を実施する。Music RAGは対象外。機能、実験条件、データ、既存のローカル未コミット変更は対象外。NotionのGitHubガイドに沿い、元の説明を保ちつつ根拠へのリンクを追加する。

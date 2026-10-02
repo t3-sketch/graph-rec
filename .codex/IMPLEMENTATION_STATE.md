@@ -1,6 +1,6 @@
 # Implementation State
 
-Last updated: 2026-09-13 (Asia/Tokyo). This repository file is the handoff source of truth. Update it after meaningful changes, verification, and before stopping. Original complete brief: `.codex/PRODUCT_REQUEST.md`.
+Last updated: 2026-10-02 (America/Los_Angeles). This repository file is the handoff source of truth. Update it after meaningful changes, verification, and before stopping. Original complete brief: `.codex/PRODUCT_REQUEST.md`.
 
 ## Goal
 
@@ -9,6 +9,18 @@ Build Sonder, a polished song-level spatial music discovery MVP directly in this
 Priority explicitly set by user: **1. UI smoothness 2. speed 3. everything else**. No recommendation ML or real account integration in this iteration.
 
 ## Current status
+
+2026-10-02 SPARCレビュー指摘5点をユーザー指示でAstraが修正。対照学習の教師を対角列へ変更し、BCEを計画の単一target条件query（e0/再構成50/50）へ戻した。検索はk_effに縮めて確率を再正規化し、quota同剰余はコードID順。APIはcurrent IDを除外集合へ必ず追加する。artifactには学習開始時のcommit/dirty/6 source hashesと実際の入力tensor内容のhashを凍結して保存し、由来情報欠落を読込時に拒否する。既存の由来情報なし人工artifactは再生成が必要。
+
+検証：Python 7/7、Node 19/19、npm typecheck、webpack build PASS。追加回帰検査は対角positive・重複ID、BCEのqueryとinterest towerへの不要な勾配なし、3興味/2候補とquota同点、APIのcurrent除外漏れ、hash/由来情報の凍結・欠落拒否。200 step・seed 0を維持し、学習前後を同一の推論経路で測定：BCE 0.6940603852 → 0.0967546701、正負margin -0.0018163174 → 7.6069059372。CLI smokeも成功し、artifact IDは34f474249dcf5db5332f49b778958d99c268b3d3d543e509ea65209f7f850d1d、保存先は `/private/tmp/sonder-sparc-fix.TAv2w2/artifact`。これは人工系列の動作検証で、音楽推薦品質ではない。
+
+次の作業：S4の音楽データ・特徴・ラベル・時間分割の判断。UI接続・browser確認・0.3・公開は未実施。今回の修正は未コミット。下の2026-10-01の数値と4/4記録は修正前の履歴。
+
+2026-10-01 SPARC S0〜S3実装・検査完了：Engineering正本のPLANとResearch master PLANへ採用範囲を記録した。S1は人工データのPyTorch model（Item/User/Interest tower、RQ、6種loss、padding、コードブックの推薦loss勾配、保存/読込）、S2は200 step人工smoke・artifact・決定的全件検索、S3は127.0.0.1 loopback HTTPとTypeScript `SparcProvider` adapterを追加した。Python `unittest` 4/4、既存15件を含むNode `npm test` 19/19、typecheck、webpack buildがPASS。timeout、未知ID、artifact/catalog版違い、余分key、NaN、不正件数を拒否する検査を含む。
+
+既存 `GenreJaccardProvider`、mock、UI、`dependencies` の既定値、FMA40 catalog/音源、0.1/0.2研究契約、npm依存は変更していない。SPARCはdependencies/store/UIへ配線しておらず、人工artifactはFMA40推薦に使っていない。進捗表示は `docs/sparc-dashboard.html`。
+
+今回の未検証・未着手：音楽データ選定、特徴/ラベル/時系列分割、本学習と品質比較、Sonder store/session/UI接続、0.3 reader、browser運用、公開/deploy。音楽側の仕様不足は推測で補完せず、S4の判断ゲートへ残した。
 
 2026-09-14 career presentation stage 2: README now links three design decisions to existing specification, source, and tests in `docs/design-evidence.md`. Checked code paths, source anchors and the scope of the existing verification record. Documentation only; no new app test, build, deployment or user-study claim. Music RAG is excluded. Publishing uses an isolated public snapshot and preserves local uncommitted work.
 
@@ -57,6 +69,8 @@ Recovery limits: Documents files were iCloud dataless/read-timeout. `docs/phase4
 ## Completed
 
 Implemented; verification scope is recorded below:
+- SPARC S0〜S3: `recommendation/sparc/{model,train,retrieval,serve,test_model}.py`、`src/services/sparc.ts`、`tests/sparc-provider.test.ts`。S0の計画採用記録、S1の6種loss/RQ勾配、S2のsynthetic artifact/決定的検索、S3のHTTP/adapter検査を完了。
+- `docs/sparc-dashboard.html`: S0〜S6の進捗・検査・残作業を表示する静的dashboard。アプリUIへの配線はしていない。
 - Next.js App Router + strict TypeScript + React Flow + Zustand scaffold and npm lockfile.
 - Provider-independent track/session/event types and recommendation/placement interfaces.
 - Mock catalog (640 fictional tracks); original local nine-cover image atlas and three 12-second synthesized WAV previews.
@@ -71,12 +85,14 @@ Implemented; verification scope is recorded below:
 
 ## In progress
 
+- SPARC S0〜S3はsource-complete。S4の音楽データ成立確認が済むまで、既定providerへの切替とS5 UI/store接続を開始しない。
 - Phase 3 implementation is done and waiting for Astra review. Do not start Phase 4.
 - Source-complete for floating motion and filament routing. Browser re-verification of drag, persistence, reduced-motion, and 500-node FPS is not claimed. Phase 3 did not change UI and did not re-run a browser pass.
 
 ## Not started
 
 Deliberately outside this MVP:
+- SPARC S4〜S6：音楽本学習、Sonder接続、0.3研究出力、公開/deploy。データprotocol、特徴対応、評価条件が未確定のため保留。
 - Real recommendation models, scores, Spotify OAuth and Apple MusicKit integration.
 - Multi-session cloud history, minimap and exploration slider.
 - Browser frame-rate benchmark at 500 nodes and physical Mac trackpad/touchscreen testing. Do not infer these from the placement test.
@@ -96,6 +112,10 @@ Deliberately outside this MVP:
 
 ## Files created / modified
 
+- `recommendation/{__init__.py,sparc/{model,train,retrieval,serve,test_model}.py,requirements.txt,.gitignore}`: S1〜S3のCPU/PyTorch人工prototype、artifact、決定的検索、loopback HTTP、標準unittest。
+- `src/services/sparc.ts`, `tests/sparc-provider.test.ts`: HTTP契約を既存RecommendationProviderへ変換するadapterと、実loopback/不正応答/timeout検査。
+- `src/domain/types.ts`: 既存providerを壊さない任意の`historyTrackIds`入力。
+- `docs/sparc-dashboard.html`: S0〜S6の静的進捗dashboard。
 - `package.json`, `package-lock.json`, `tsconfig.json`, `next.config.ts`, `next-env.d.ts`, `.gitignore`: infrastructure; start now serves static out/ using Python HTTP server.
 - `AGENTS.md`, `CLAUDE.md`: framework-generated instructions; read local Next docs before framework changes.
 - `src/app/{layout,page}.tsx`, `src/app/globals.css`: entrypoints and styling.
@@ -117,6 +137,13 @@ Deliberately outside this MVP:
 - `.codex/{IMPLEMENTATION_STATE,PRODUCT_REQUEST}.md`: recovery handoff and original scope.
 
 ## Verification status
+
+SPARC S0〜S3 (2026-10-01):
+- S0: Engineering `PLAN.md` とResearch `/Users/macuser/dev/sasrec-serendipity/PLAN.md` に採用範囲を追記。SPARC計画の最新差分、正本の既存境界、40曲/0.1/0.2仕様を照合。
+- S1/S2: `python3 -m unittest discover -s recommendation/sparc -p 'test_*.py'` は4/4 PASS。200 step smokeでBCE `0.69424045 → 0.69381160`、正負score margin `0.00025515 > 0`、artifact ID生成。shape/padding、全6 loss有限、RQを除いた推薦lossから選択codebookへの有限非ゼロ勾配、state_dict復元、決定的検索、重複/除外/全件枯渇を確認。
+- S3: Python loopback HTTP往復（127.0.0.1、実body）を含む4/4 PASS。未知ID=400、artifact版違い=409、全件除外=空配列を確認。Node `npm test` は19/19 PASS（既存15 + SPARC adapter 4）。adapterでunknown ID、responseの余分key/NaN、HTTP error、timeoutを拒否し、Node標準HTTP fixtureとの実往復も確認。
+- Engineering `npm run typecheck` PASS。`npm run build -- --webpack` PASS（Next.js 16.3.4）。既存baseline、UI、依存、40音源の差分なしを確認。
+- loopbackとnpm検査はsandboxのIPC/socket制限のためsandbox外で実行した。browser、音楽データ、本学習、UI配線、0.3、公開は検査していない。
 
 Phase 3 (2026-09-13), isolated checkout `python3 scripts/isolated-run.py`:
 - test: 9/9 PASS (existing 4 + research-export 5). Placement check 33ms. No browser claim.
@@ -151,6 +178,8 @@ Earlier MVP verification:
 
 ## Known issues
 
+- SPARCの人工モデルは接続用prototypeで、FMA40の特徴・履歴・学習品質を意味しない。S4で音楽データ、positive定義、時間分割、特徴版、予算を確定するまで既定providerへ切り替えない。
+- S3はlocal-only loopback server。TLS、認証、外部bind、公開配信、retry/fallbackは実装していない。S5以降の配信方式・費用判断が必要。
 - Memoized graph and narrow store subscriptions; Map-based synchronization; telemetry does not recalculate edges. No claim of measured 500-node browser FPS.
 - Initial camera fits after children initialize once per session; verified. Viewport resize recenters active node.
 - Player bar heights unified to avoid canvas shift on playback.
@@ -162,7 +191,8 @@ Earlier MVP verification:
 
 ## Next exact actions
 
-Latest next action: finish Phase 4 acceptance review on this canonical checkout, including browser download delivery if required for acceptance. Read PLAN and the recovered Phase 4 documents. Do not run the old cache-to-Documents sync helper. Do not start Phase 5, commit, push or deploy without user scope. The numbered items below are historical.
+Latest next action: S4のデータ成立判断（音楽データ、特徴、ラベル、時間分割、FMA40対応）が採択されるまで、今回のS0〜S3を既定provider/UIへ接続しない。設計不足は推測で埋めず、影響と最小代案を返す。S4を開始する場合はEngineering/Researchの計画を先に更新する。
+Historical Phase 4 next action: finish the acceptance review on this canonical checkout, including browser download delivery if required for acceptance. Do not run the old cache-to-Documents sync helper. Do not start Phase 5, commit, push or deploy without user scope. The numbered items below are historical.
 
 1. Astra designs Phase 4 data source, baseline, and end-to-end scope; Sol implements only after user approval. Do not start live-data integration or ratings collection yet.
 2. Public GitHub checkpoint is complete. Keep `.openai/` and `.codex/SOURCE_SNAPSHOT.json` excluded. Repository publication does not authorize Site deployment.

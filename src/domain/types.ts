@@ -50,7 +50,7 @@ export type ExplorationSession = {
   researchEvents?: SessionResearchEvent[]; nodeOriginCaseId?: Record<string, string>;
   buildProvenance?: SessionBuildProvenance;
 };
-export type RecommendationContext = { currentTrackId: string; sessionPath: string[]; exploredTrackIds: string[]; limit: number; playlistContext?: ExplorationSession['playlistContext'] };
+export type RecommendationContext = { currentTrackId: string; sessionPath: string[]; exploredTrackIds: string[]; limit: number; playlistContext?: ExplorationSession['playlistContext']; historyTrackIds?: string[] };
 export type RecommendedTrack = { track: Track; scores?: Scores; sharedGenreCount?: number; unionGenreCount?: number };
 export interface RecommendationProvider { getRecommendations(context: RecommendationContext): Promise<RecommendedTrack[]> }
 export interface GraphPlacementStrategy { placeChildren(args: { parent?: MusicGraphNode; current: MusicGraphNode; count: number; existingNodes: MusicGraphNode[] }): Point[] }
